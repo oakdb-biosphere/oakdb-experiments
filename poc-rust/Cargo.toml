@@ -1,0 +1,39 @@
+[package]
+name = "poc-rust"
+version = "0.1.0"
+license = "ISC"
+edition = "2018"
+
+[dependencies]
+quick-js = "0.4.1"
+bimap = "0.6.2"
+commitlog = "0.2"
+colorful = "0.2.1"
+clap = { version = "3.1.2", features = ["derive"] }
+base64 = "0.13.0"
+tokio = { version = "0.2", features = ["macros", "sync"] }
+warp = "0.2"
+serde = {version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+futures = { version = "0.3", default-features = false }
+uuid = { version = "0.4", features = ["serde", "v4"] }
+
+[[bin]]
+name = "quickjs"
+path = "src/quickjs.rs"
+
+[[bin]]
+name = "commitlog"
+path = "src/commitlog.rs"
+
+[[bin]]
+name = "bimap"
+path = "src/bimap.rs"
+
+[[bin]]
+name = "cli"
+path = "src/cli.rs"
+
+[[bin]]
+name = "ws"
+path = "src/main-ws.rs"
