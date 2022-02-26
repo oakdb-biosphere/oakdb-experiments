@@ -24,7 +24,7 @@ jobs:
           (cd poc && yarn install --frozen-lockfile)
           cd visualizer
           yarn install --frozen-lockfile
-          yarn run build
+          yarn run build -- --base=/oakdb-experiments/
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.5
