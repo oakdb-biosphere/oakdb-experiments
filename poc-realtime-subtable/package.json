@@ -1,0 +1,13 @@
+{
+  "name": "poc-realtime-subtable",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npx nodemon -r esm ./playground.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "esm": "^3.2.25",
+    "jest": "^27.5.1"
+  }
+}
