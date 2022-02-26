@@ -1,0 +1,54 @@
+.app {
+  height: 100vh;
+}
+
+.box {
+  height: 100%;
+  width: 100%;
+  background: white;
+  overflow: scroll;
+}
+
+.boxWithoutScroll {
+  height: 100%;
+  width: 100%;
+  background: white;
+}
+
+.editor {
+  overflow: hidden;
+  height: calc(100% - 48px);
+}
+
+.addressBar {
+  height: 48px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.Resizer {
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.Resizer.vertical {
+  width: 5px;
+  background: var(--chakra-colors-gray-300);
+  cursor: col-resize;
+}
+
+.Resizer.horizontal {
+  height: 5px;
+  background: var(--chakra-colors-gray-300);
+  cursor: row-resize;
+}
+
+.codeSnippet {
+  font-size: 12px;
+}
+
+pre > code {
+  display: block;
+}
