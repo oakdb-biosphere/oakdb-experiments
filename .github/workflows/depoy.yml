@@ -20,6 +20,7 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
+          (cd poc && yarn install --frozen-lockfile)
           cd visualizer
           yarn install --frozen-lockfile
           yarn run build
