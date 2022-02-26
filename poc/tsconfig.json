@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es2021",
+    "lib": ["dom", "es2021"],
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  }
+}
