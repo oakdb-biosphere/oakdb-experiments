@@ -1,15 +1,19 @@
 import { parallel, collapse } from "./utils/utils";
 import { PrimaryStorage } from "./PrimaryStorage";
 import { TreeIndex } from "./TreeIndex";
+import { SubscriptionTable } from "./SubscriptionTable";
+import hash from "./utils/hash";
 
 export function DB() {
   const p = PrimaryStorage();
   const t = TreeIndex();
+  const u = SubscriptionTable();
   const callbacks = {};
+  let autocounter = 0;
 
   return {
     clear() {
-      return parallel(p.clear(), t.clear());
+      return parallel(p.clear(), t.clear(), u.clear());
     },
 
     on(event, cb) {
@@ -34,8 +38,18 @@ export function DB() {
 
     $debug() {
       return p.$debug
-        ? { p: p.$debug(), t: t.$debug(), s: this.$state.bind(this) }
+        ? {
+            p: p.$debug(),
+            t: t.$debug(),
+            u: u.$debug(),
+            s: this.$state.bind(this),
+          }
         : {};
+    },
+
+    uuid(path = Math.random()) {
+      autocounter += 1;
+      return Math.abs(hash(`${path}:${autocounter}`)).toString(16);
     },
 
     async createObject(path, id, obj) {
@@ -102,6 +116,16 @@ export function DB() {
       this.$log("getPathById", { id });
       return t.getById(id);
       // return t.getByPath(path);
+    },
+
+    async subscribeUserToPath(userId, path) {
+      this.$log("subscribeUser", { userId, path });
+      return u.subscribe(userId, path);
+    },
+
+    async unsubscribeUserFromPath(userId, path) {
+      this.$log("unsubscribeUserFromPath", { userId });
+      return u.unsubscribe(userId, path);
     },
   };
 }

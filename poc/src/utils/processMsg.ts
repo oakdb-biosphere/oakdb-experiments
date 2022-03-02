@@ -50,6 +50,9 @@ export async function processMsg(db, msgOriginal, { $log }) {
 
   delete msg.pathBackup;
 
+  // TODO:
+  msg.connectionId = "con:1";
+
   // TODO: Aliases?
   return msg;
 }

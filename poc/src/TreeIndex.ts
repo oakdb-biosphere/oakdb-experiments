@@ -10,11 +10,12 @@ export function TreeIndex() {
     $debug: db.$debug,
     clear: db.clear.bind(db),
 
-    set(path, id) {
+    async set(path, id) {
       path.endsWith("/") || (path += "/");
       path = `${path}${autoincrement}`;
       autoincrement += 1;
-      return parallel(db.put(path, id), db.put(id, path));
+      await parallel(db.put(path, id), db.put(id, path));
+      return path;
     },
 
     async deleteByPath(path) {

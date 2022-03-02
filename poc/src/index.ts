@@ -15,8 +15,8 @@ export default function OakDB() {
       const ctx = { $log: db.$log.bind(db) };
       const msg = await processMsg(db, msgUnprocessed, ctx);
       const result = await execMessage(db, msg, ctx);
-      const { p: opvmap, t: bimap, s: state } = db.$debug();
-      return { opvmap, bimap, state, result };
+      const { p: opvmap, t: bimap, s: state, u: subtab } = db.$debug();
+      return { opvmap, bimap, subtab, state, result };
     },
   };
 }

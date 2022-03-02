@@ -14,7 +14,9 @@ export async function execMessage(db, msg, { $log }) {
       if (typeof msg.value !== "object") {
         throw new Error("value must be an object");
       }
-      await db.createObject(msg.path, msg.id, msg.value);
+      const id = db.uuid(msg.path);
+      const [path] = await db.createObject(msg.path, id, msg.value);
+      result = { id, path };
       break;
     }
 
@@ -36,10 +38,12 @@ export async function execMessage(db, msg, { $log }) {
       } else {
         if (msg.pathNotFound) {
           await db.createObject(msg.path, msg.id, msg.value);
-        } else if (msg.op === "update") {
-          await db.updateObject(msg.id, msg.value);
         } else {
-          await db.createObject(msg.path, msg.id, msg.value);
+          // else if (msg.op === "update") {
+          // TODO: update => merge, set => overwrite
+          await db.updateObject(msg.id, msg.value);
+          // } else {
+          // await db.createObject(msg.path, msg.id, msg.value);
         }
       }
       break;
@@ -63,6 +67,14 @@ export async function execMessage(db, msg, { $log }) {
       } else {
         result = await db.getObjectById(msg.id);
       }
+      if (msg.op === "subscribe") {
+        await db.subscribeUserToPath(msg.connectionId, msg.path);
+      }
+      break;
+    }
+
+    case "unsubscribe": {
+      await db.unsubscribeUserFromPath(msg.connectionId, msg.path);
       break;
     }
 

@@ -11,6 +11,9 @@ export function PrimaryStorage() {
     clear: db.clear.bind(db),
 
     setProp(objectId, prop, value) {
+      if (!value) {
+        return db.del(`${objectId}:${prop}`);
+      }
       return db.put(`${objectId}:${prop}`, value);
     },
 
