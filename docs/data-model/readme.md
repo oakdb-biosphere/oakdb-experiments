@@ -82,8 +82,6 @@ Each object has an ID and a collection of properties with values. One way to thi
 
 For example the following JSON document:
 
-<!-- createObject({ id: `__uuid__`, createdAt: `__timestamp__`, ...}) -->
-
 ```json
 {
   "book": {
@@ -184,3 +182,7 @@ If you want to create a single file you can run `oakdb export --out <path> --arc
 - DOM / XML
 
 ### Why not have a `children` field?
+
+### Nested documents
+
+/type/<uuid>/subtype/<uuid>

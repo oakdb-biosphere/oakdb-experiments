@@ -1,5 +1,3 @@
-[Go back](../readme.md)
-
 ## Setting a single prop
 
 **Operation**
