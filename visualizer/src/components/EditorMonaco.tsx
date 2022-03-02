@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { default as JsonEditor } from "@monaco-editor/react";
 
 const options = {
-  fontSize: 18,
+  fontSize: 16,
   acceptSuggestionOnCommitCharacter: true,
   acceptSuggestionOnEnter: "on",
   accessibilitySupport: "auto",

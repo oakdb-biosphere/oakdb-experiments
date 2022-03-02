@@ -1,17 +1,24 @@
-import { Heading as HeadingChakra } from "@chakra-ui/react";
+import { Heading as HeadingChakra, HeadingProps } from "@chakra-ui/react";
 
 interface IHeading {
-  size?: string;
+  size?: HeadingProps["size"];
+  textAlign?: HeadingProps["textAlign"];
+  spacing?: number;
   children?: React.ReactNode;
 }
 
-export function Heading({ size, children }: IHeading) {
+export function Heading({
+  size = "md",
+  textAlign = "center",
+  spacing = 1,
+  children,
+}: IHeading) {
   return (
     <HeadingChakra
       size={size}
-      textAlign="center"
-      pb={1}
-      pt={1}
+      textAlign={textAlign}
+      pb={spacing}
+      pt={spacing}
       color={"gray.600"}
       backgroundColor={"gray.50"}
       borderColor={"gray.100"}

@@ -17,6 +17,7 @@ export const opAtomsAtom = splitAtom(opLogAtom);
 export const stateAtom = atom({});
 export const opvMapAtom = atom([]);
 export const biMapAtom = atom([]);
+export const subTabAtom = atom([]);
 
 function connectAtoms() {
   const setters: Record<string, SetStateAction<any>> = {};
@@ -24,6 +25,7 @@ function connectAtoms() {
   opLogAtom.onMount = (set) => (setters["setOpLog"] = set);
   opvMapAtom.onMount = (set) => (setters["setOpvMap"] = set);
   biMapAtom.onMount = (set) => (setters["setBiMap"] = set);
+  subTabAtom.onMount = (set) => (setters["setSubTab"] = set);
   stateAtom.onMount = (set) => (setters["setState"] = set);
   queryResultAtom.onMount = (set) => (setters["setResult"] = set);
 
@@ -32,14 +34,16 @@ function connectAtoms() {
   );
 
   const sendCmd = async (cmd: TCmd) => {
-    const { setOpLog, setBiMap, setOpvMap, setResult, setState } = setters;
+    const { setOpLog, setBiMap, setOpvMap, setSubTab, setResult, setState } =
+      setters;
 
     setOpLog((oplog) => [...oplog, cmd]);
 
-    const { opvmap, bimap, state, result } = await getOak().exec(cmd);
+    const { opvmap, bimap, subtab, state, result } = await getOak().exec(cmd);
 
     setBiMap(bimap);
     setOpvMap(opvmap);
+    setSubTab(subtab);
     setResult(result);
     state().then(setState);
 

@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
 import { Heading } from "../components/Heading";
-import { FiLogIn, FiArrowLeft, FiInfo } from "react-icons/fi";
+import { FiLogIn, FiArrowLeft } from "react-icons/fi";
 import {
   Button,
   Table,
-  Thead,
   Tbody,
   Tr,
-  Th,
   Td,
   ButtonGroup,
   Box,
+  Tooltip,
 } from "@chakra-ui/react";
 
 import { demo } from "../demo";
@@ -29,37 +28,57 @@ export function Help({ mdPromise }) {
   );
 }
 
+function mapMultiLineCode(code) {
+  return code.split("\n").map((line) => (
+    <code className={"codeSnippet"} key={line}>
+      {line}
+      <br />
+      <br />
+    </code>
+  ));
+}
+
 export function Group({ title, examples, onInsert, onSelectInfo }) {
   return (
     <div>
-      <Heading size="sm">{title}</Heading>
+      <Heading size="sm" spacing={4}>
+        {title}
+      </Heading>
       <Table variant="striped" size="sm">
-        <Thead>
-          <Tr>
-            <Th>Example</Th>
-            <Th>Actions</Th>
-          </Tr>
-        </Thead>
         <Tbody>
           {examples.map((item, index) => (
-            <Tr key={index}>
+            <Tr key={index} opacity={item.final ? 1.0 : 0.5}>
               <Td style={{ width: "100%" }}>
-                <code className={"codeSnippet"}>{item.code}</code>
+                <Button
+                  variant="link"
+                  fontWeight={500}
+                  onClick={() => onSelectInfo(item)}>
+                  {item.title ? (
+                    item.title
+                  ) : (
+                    <code>{item.code.substring(0, 32)}...</code>
+                  )}
+                </Button>
               </Td>
               <Td>
                 <ButtonGroup isAttached spacing={0} size="sm" variant="solid">
-                  <Button
-                    leftIcon={<FiLogIn />}
-                    size="sm"
-                    title="Insert snippet into query editor"
-                    onClick={() => onInsert(item)}
-                  />
-                  <Button
-                    leftIcon={<FiInfo />}
-                    size="sm"
-                    title="More info about this command"
-                    onClick={() => onSelectInfo(item)}
-                  />
+                  {item.code && (
+                    <Tooltip
+                      label={
+                        <div>
+                          <span>Insert snippet into query editor:</span>
+                          <br />
+                          <br />
+                          {mapMultiLineCode(item.code)}
+                        </div>
+                      }>
+                      <Button
+                        leftIcon={<FiLogIn />}
+                        size="sm"
+                        onClick={() => onInsert(item)}
+                      />
+                    </Tooltip>
+                  )}
                 </ButtonGroup>
               </Td>
             </Tr>
@@ -97,17 +116,21 @@ export function CommandsPane({ onInsertCode }) {
   }
 
   return (
-    <>
-      <Heading size="md">Available Commands</Heading>
-      {demo.map(({ title, examples }) => (
-        <Group
-          key={title}
-          title={title}
-          examples={examples}
-          onInsert={onClickInsert}
-          onSelectInfo={onClickInfo}
-        />
-      ))}
-    </>
+    <Box>
+      <Heading size="md" spacing={4}>
+        Available Commands
+      </Heading>
+      <Box mb={12}>
+        {demo.map(({ title, examples }) => (
+          <Group
+            key={title}
+            title={title}
+            examples={examples}
+            onInsert={onClickInsert}
+            onSelectInfo={onClickInfo}
+          />
+        ))}
+      </Box>
+    </Box>
   );
 }

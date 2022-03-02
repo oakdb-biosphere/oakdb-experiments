@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import SplitPane from "react-split-pane";
 
 import { DebugPane } from "./panes/DebugPane";
+import { SubscriptionTabPane } from "./panes/SubscriptionTabPane";
 import { StatePane } from "./panes/StatePane";
 import { OpLogPane } from "./panes/OpLogPane";
 import { QueryResultPane } from "./panes/QueryResultPane";
@@ -19,35 +20,40 @@ export default function App() {
   return (
     <>
       <SplitPane split="vertical" defaultSize="33%" primary="first">
-        <div className="boxWithoutScroll">
-          <EditorPane isReady={isReady} />
-        </div>
+        <SplitPane split="horizontal" defaultSize={"85%"}>
+          <div className="boxWithoutScroll">
+            <EditorPane isReady={isReady} />
+          </div>
+          <div className="box">
+            <QueryResultPane />
+          </div>
+        </SplitPane>
         <SplitPane split="vertical" defaultSize={"50%"}>
-          <SplitPane split="horizontal" defaultSize={"50%"}>
-            <div className="box">
-              <OPVMapPane />
-            </div>
-            <div className="box">
-              <BiMapPane />
+          <SplitPane split="horizontal" defaultSize={"80%"}>
+            <SplitPane split="horizontal" defaultSize={"50%"}>
+              <div className="box">
+                <OPVMapPane />
+              </div>
+              <div className="box">
+                <BiMapPane />
+              </div>
+            </SplitPane>
+            <div className="boxWithoutScroll">
+              <SubscriptionTabPane />
             </div>
           </SplitPane>
           <SplitPane split="horizontal" defaultSize={"50%"}>
-            <SplitPane split="horizontal" defaultSize={"75%"}>
-              <div className="box">
-                <OpLogPane />
-              </div>
-              <div className="box">
+            <div className="box">
+              <OpLogPane />
+            </div>
+            <div className="box">
+              <StatePane />
+            </div>
+            {/* <SplitPane split="horizontal" defaultSize={"50%"}>
+              <div className="boxWithoutScroll">
                 <DebugPane isReady={isReady} />
               </div>
-            </SplitPane>
-            <SplitPane split="horizontal" defaultSize={"50%"}>
-              <div className="box">
-                <QueryResultPane />
-              </div>
-              <div className="boxWithoutScroll">
-                <StatePane />
-              </div>
-            </SplitPane>
+            </SplitPane> */}
           </SplitPane>
         </SplitPane>
       </SplitPane>

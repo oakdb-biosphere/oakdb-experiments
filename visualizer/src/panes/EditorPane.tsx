@@ -3,12 +3,14 @@ import { useAtom } from "jotai";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { FiPlay, FiEye, FiEyeOff, FiSave, FiAlignLeft } from "react-icons/fi";
 import EditorMonaco from "../components/EditorMonaco";
-import { editorTextAtom } from "../state";
+import { editorTextAtom, queryResultAtom } from "../state";
 import { CommandsPane } from "./CommandsPane";
 import { dispatchCmd as onSendCmd } from "../state";
 
-export function EditorPane({ isReady }) {
+export function EditorPane({ isReady: _isReady }) {
+  const [isReady, setIsReady] = useState(_isReady);
   const [data, setData] = useAtom(editorTextAtom);
+  const [previousQueryResult] = useAtom<{ id?: string }>(queryResultAtom);
   const [formatCounter, setFormatCounter] = useState(0);
   const [isValid, setIsValid] = useState(true);
   const [isDirty, setIsDirty] = useState(false);
@@ -19,6 +21,7 @@ export function EditorPane({ isReady }) {
     if (text) {
       setData(text);
     }
+    setIsReady(true);
   }, []);
 
   const onChange = (newData) => {
@@ -34,7 +37,11 @@ export function EditorPane({ isReady }) {
   const onInsertCode = (code) => {
     setShowCommands(false);
     const addComment = (s) => (s.startsWith(`//`) ? s : `// ${s}`);
-    setData((data) => [...data.split("\n").map(addComment), code].join("\n"));
+    const replaceUUID = (s) =>
+      s.replaceAll("<uuid>", previousQueryResult?.id ?? "<uuid>");
+    setData((data = "") =>
+      [...data.split("\n").map(addComment), replaceUUID(code)].join("\n"),
+    );
   };
 
   const onRun = async () => {
