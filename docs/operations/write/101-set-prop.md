@@ -1,32 +1,68 @@
+[Go back](../readme.md)
+
 ## Setting a single prop
 
-Command:
+**Operation**
 
 ```js
-{ op: "set", path: "/k", value: "oak" }
+{ op: "set", path: "/a/b", prop: "field", value: "oak" }
 ```
 
-Operations:
+or
+
+```js
+{ op: "set", uuid: "3596a30bd69384624c11", prop: 'field', value: "oak" }
+```
+
+**Description**
+
+1. If operation is using `path`, get object uuid from BiMap lookup:
 
 ```cs
-[DEL] ("/")
-[PUT] ("/k", "oak")
+[GET] (("/a/b"))
+[GET] (("/a/b/field"))
 ```
 
-Key-Value store:
+Lookup full path and basepath - we don't know if `field` is a property or part of the path.
+
+2. Write to OPVMap:
 
 ```cs
-("/k", "oak")
+[PUT] (("3596a30bd69384624c11", "field"), "oak")
 ```
 
-New State:
+3. No write to BiMap needed
+
+**New State:**
 
 ```js
 {
-  k: "oak",
+  a: {
+    b: {
+      field: "oak";
+    }
+  }
 }
 ```
 
-Discussion:
+# Discussion
 
-- `DEL "/"` is necessary to guarantee data consistency.
+**Discussion on paths:**
+
+If the path had a special syntax where path and property are easily distinguishable,
+we could skip one lookup in the OPVMap.
+
+```js
+{ op: "set", path: "/a/b:field", value: "oak" }
+```
+
+**Discussion on values:**
+
+OakDB requires each document to be representable as a key-value map, so receiving a single value `"oak"`, would tell us, that `field` can not be a document, but has to be a property:
+
+```js
+{ op: "set", path: "/a/b/field", value: "oak" }
+{ op: "set", path: "/a/b", value: { field: "oak" } }
+```
+
+However, the inverse it NOT true. If we receive an object, we do not know if `field` is a property or a document.

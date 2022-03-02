@@ -21,9 +21,12 @@ OakDB uses the following special properties:
 
 `_type`: Defines a type for schema validation
 `_order`: OakDB supports floating point array indices for fractional indexing.
+`_meta`: Meta data about folders
 
 OakDB assumes the following path schema:
 
 ```
 /type/<uuid>/subtype/<uuid>
 ```
+
+`_title` or `_alias`: Can be used for path queries as a substitute for the path key
