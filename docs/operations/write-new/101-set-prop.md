@@ -3,10 +3,8 @@
 **Operation**
 
 ```js
-{ op: "set", path: "/a/b", prop: "field", value: "oak" }
+{ op: "set", path: "/a/b/field", value: "oak" } // ???
 ```
-
-or
 
 ```js
 { op: "set", uuid: "3596a30bd69384624c11", prop: 'field', value: "oak" }
@@ -62,5 +60,3 @@ OakDB requires each document to be representable as a key-value map, so receivin
 { op: "set", path: "/a/b/field", value: "oak" }
 { op: "set", path: "/a/b", value: { field: "oak" } }
 ```
-
-However, the inverse it NOT true. If we receive an object, we do not know if `field` is a property or a document.

@@ -1,5 +1,16 @@
 ## Deleting a prop or subtree
 
+Delete a property from on object. If the last property is deleted, the object is removed.
+
+**Operation**
+
+```js
+{ op: "set", id: "<uuid>", prop: "a", value: null }
+
+```
+
+**Description**
+
 Previous State:
 
 ```js

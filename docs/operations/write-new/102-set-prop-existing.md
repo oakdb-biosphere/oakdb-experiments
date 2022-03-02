@@ -2,36 +2,31 @@
 
 **Assumptions**
 
-`k1` (string) is overwritten with an object.
-
 Current state is
 
 ```js
-{ root: { k1: "bar", } }
+{ k: "bar", }
+{ k: { "<uuid>": "bar" } }
 ```
 
-Desired state:
-
-```js
-{ root: { k1: { "k2": "bar" } } }
-```
-
-Internal:
+`k` (string) is overwritten with an object.
 
 ```cs
 // OPVMap
-(("root", "k1"), "bar") -> (("k1", "k2"), "bar")
+(("<uuid>", "k"), "bar")
 // BiMap
-("/", "root")           -> ("/root", "k1")
+("/k", "<uuid>")
 ```
 
 **Operation**
 
 ```js
-{ op: "set", path: "/root/k1", value: { "k2": "bar" } }
-{ op: "set", path: "/root/k1:k2", value: "bar" }
-{ op: "set", uuid: "root", prop: "k1", value: { "k2": "bar" }}
-// { op: "set", uuid: "root", prop: "k1/k2", value: "bar" }
+{ op: "set", path: "/k/foo", value: "bar" }
+{ op: "set", path: "/k:foo", value: "bar" }
+```
+
+```js
+{ op: "set", uuid: "3596a30bd69384624c11", prop: 'foo', value: "bar" }
 ```
 
 **Description**
@@ -39,28 +34,27 @@ Internal:
 1. If operation is using `path`, get object uuid from BiMap lookup:
 
 ```cs
-[GET] (("/root/k1"))
-[GET] (("/root"))
+[GET] (("/k"))
+[GET] (("/k/foo"))
 ```
 
 2. Write to OPVMap:
 
 ```cs
-[DEL] (("root", "k1"))
-[PUT] (("k1", "k2"), "bar")
+[PUT] (("3596a30bd69384624c11", "type"), "oak")
 ```
 
-3. Write to BiMap:
+Previous State:
 
-```cs
-[DEL:LEFT] (("/"))
-[DEL:RIGHT] (("root"))
-[PUT] (("/root"), "k1")
+New State:
+
+```js
+{ k: { foo: "bar" }, }
 ```
 
 Must always issue a `DEL /<subpath>` operation before issuing a `PUT /<subpath>/<prop>`.
 
-<!--
+---
 
 Key-Value store:
 
@@ -80,5 +74,3 @@ It could be possible that two conflicting keys exist that both need to be delete
 ```
 
 However, this state should never happen since writing `/k/foo` should have deleted `/k` first.
-
--->
