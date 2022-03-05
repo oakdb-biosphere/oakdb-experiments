@@ -27,12 +27,17 @@ function randomItem(list = []) {
 
 // Populating random flight data
 export const flights = []
-while (flights.length < 10) {
+
+while (flights.length < 20) {
   const [a, b] = [randomItem(airports), randomItem(airports)];
   if (a.iata == b.iata) continue
 
   const flight = { ...averageFlightData.get(a.iata, b.iata) }
   flight.durationInMinutes += randomBetween(-20, 20)
   flight.priceInUSD += randomBetween(-75, 75)
+  flight.departsAt = new Date();
+  flight.departsAt.setHours(randomBetween(5, 23))
+  flight.departsAt.setMinutes(randomBetween(0, 60))
+  flight.departsAt.setDate(flight.departsAt.getDate() + randomBetween(0, 7))
   flights.push(flight)
 }
