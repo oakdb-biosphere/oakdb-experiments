@@ -1,23 +1,30 @@
 <script lang="ts">
-  import logo from './assets/svelte.png'
-  import Counter from './lib/Counter.svelte'
+
+  const airports = [
+    { iata: "DFW", name: "Dallas/Fort Worth International Airport" },
+    { iata: "JFK", name: "John F. Kennedy International Airport" },
+    { iata: "LAX", name: "Los Angeles International Airport" },
+    { iata: "DEN", name: "Denver International Airport" },
+  ]
+
+  const averageFlightData = {
+    get(a, b) { return a < b ? this[`${a}:${b}`] : this[`${b}:${a}`] },
+    "DEN:DFW": { durationInMinutes: 120, priceInUSD: 500, },
+    "DEN:LAX": { durationInMinutes: 160, priceInUSD: 450, },
+    "DEN:JFK": { durationInMinutes: 220, priceInUSD: 700, },
+    "DFW:JFK": { durationInMinutes: 200, priceInUSD: 300, },
+    "DFW:LAX": { durationInMinutes: 200, priceInUSD: 250, },
+    "LAX:JFK": { durationInMinutes: 320, priceInUSD: 600, },
+  }
+
 </script>
 
 <main>
-  <img src={logo} alt="Svelte Logo" />
-  <h1>Hello Typescript!</h1>
+  <h1>Flights</h1>
 
-  <Counter />
-
-  <p>
-    Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
-    apps.
-  </p>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a> for
-    the officially supported framework, also powered by Vite!
-  </p>
+  <pre>
+    {JSON.stringify(averageFlightData.get('DEN', 'DFW'))}
+  </pre>
 </main>
 
 <style>
@@ -30,11 +37,6 @@
     text-align: center;
     padding: 1em;
     margin: 0 auto;
-  }
-
-  img {
-    height: 16rem;
-    width: 16rem;
   }
 
   h1 {
