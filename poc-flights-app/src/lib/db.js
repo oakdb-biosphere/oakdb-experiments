@@ -33,6 +33,8 @@ while (flights.length < 20) {
   if (a.iata == b.iata) continue
 
   const flight = { ...averageFlightData.get(a.iata, b.iata) }
+  flight.originIATA = a.iata;
+  flight.destinationIATA = b.iata;
   flight.durationInMinutes += randomBetween(-20, 20)
   flight.priceInUSD += randomBetween(-75, 75)
   flight.departsAt = new Date();
