@@ -1,5 +1,12 @@
 
 <script lang="ts" context="module">
+  export interface PresentableFlightListing {
+    departureDateShort: String,
+    departureDateLong: String,
+    startAndEndTimes: String,
+    IATAs: String,
+    price: String,
+  }
 
   function shortTime(date: Date): String {
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })
@@ -20,13 +27,13 @@
     return `${shortTime(start)} - ${shortTime(end)}`
   }
 
-  export function format(flight) {
+  export function makePresentable(flight): PresentableFlightListing {
     return {
       departureDateShort: shortDate(flight.departsAt),
       departureDateLong: longDate(flight.departsAt),
       startAndEndTimes: getStartAndEndTimes(flight),
       IATAs: `${flight.originIATA} - ${flight.destinationIATA}`,
-      price: '$' + flight.priceInUSD,
+      price: `$${flight.priceInUSD}`,
     }
   }
 
