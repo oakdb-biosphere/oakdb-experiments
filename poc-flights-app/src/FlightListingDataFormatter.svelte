@@ -1,24 +1,29 @@
 
 <script lang="ts" context="module">
-  function getStartAndEndTimes(flight) {
-    let d1 = flight.departsAt
-    let d2 = new Date(flight.departsAt)
-    d2.setMinutes(d2.getMinutes() + flight.durationInMinutes)
-    let startTime = d1.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
-    let endTime = d2.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
-    return `${startTime} - ${endTime}`
+
+  function shortTime(date: Date): String {
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })
+  }
+
+  function shortDate(date: Date): String {
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  }
+
+  function longDate(date: Date): String {
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' })
+  }
+
+  function getStartAndEndTimes(flight): String {
+    let start = flight.departsAt
+    let end = new Date(flight.departsAt)
+    end.setMinutes(end.getMinutes() + flight.durationInMinutes)
+    return `${shortTime(start)} - ${shortTime(end)}`
   }
 
   export function format(flight) {
     return {
-      departureDateShort: flight?.departsAt?.toLocaleDateString('en-US', {
-        month: 'short', day: 'numeric',
-      }),
-
-      departureDateLong: flight?.departsAt?.toLocaleDateString('en-US', {
-        weekday: 'short', month: 'long', day: 'numeric',
-      }),
-
+      departureDateShort: shortDate(flight.departsAt),
+      departureDateLong: longDate(flight.departsAt),
       startAndEndTimes: getStartAndEndTimes(flight),
       IATAs: `${flight.originIATA} - ${flight.destinationIATA}`,
       price: '$' + flight.priceInUSD,
